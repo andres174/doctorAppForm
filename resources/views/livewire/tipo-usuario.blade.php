@@ -1,28 +1,43 @@
 <div>
-    <div class="justify-content-center">
+    <div class="row justify-content-center">
         <div class="col-6 " >
             <div class="card ">
                 <div class="card-header">
                     <h5 class="card-title">Tipo de Usuario</h5>
                 </div>
-                <div class="card-body">         
-                       <div class="mb-3">
-                            <label class="form-label">Tipo</label>
-                            <input type="text" class="form-control" placeholder="" wire:model="tipos">
-                       </div>
-                       @if ($button)
-                            <button type="button" class="btn btn-primary" wire:click="guardar">Guardar</button>
-                       @else
-                            <button type="button" class="btn btn-primary" wire:click="update">Actualizar</button>
-                       @endif
-                       
-                       {{-- <button type="button" class="btn btn-primary" wire:click="guardar">Guardar</button>
-                      
-                       <button type="button" class="btn btn-primary" wire:click="update">Actualizar</button> --}}
-                      
+                <div class="card-body">
+                    <div class="mb-3">
                         
+                        @if ($button)
+                            <form wire:submit.prevent="guardar">
+                                @include('livewire.formTipo')
+
+                                <button type="submit" class="btn btn-primary" >Guardar</button>
+                                
+                            </form>
+                        @else
+                            <form wire:submit.prevent="update">
+                                @include('livewire.formTipo')
+                                
+                                <button type="submit" class="btn btn-primary">Actualizar</button>
+                                
+                            </form>
+                        @endif
+                   </div>
+                   {{-- @if ($button)
+                        <button type="button" class="btn btn-primary" wire:click="guardar">Guardar</button>
+                   @else
+                        <button type="button" class="btn btn-primary" wire:click="update">Actualizar</button>
+                   @endif --}}
+                   
+                   {{-- <button type="button" class="btn btn-primary" wire:click="guardar">Guardar</button>
+                  
+                   <button type="button" class="btn btn-primary" wire:click="update">Actualizar</button> --}}
+                  
+                   
+                    <input wire:model="search" type="search" class="form-control" placeholder="Buscar tipos...">
+                </div>
             </div>
-        </div>
         </div>
         <div class="row justify-content-center">
             <div class="col-10" >
@@ -57,12 +72,17 @@
                                 </td>
                             </tr>
                             @endforeach
+                            {{ $t->links() }}
                         </tbody>
+                        
                     </table>
+                    
         
                 </div>
+                
             </div>
             </div>
+            
             </div>
         </div>
 </div>

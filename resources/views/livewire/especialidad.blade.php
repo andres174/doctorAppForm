@@ -1,29 +1,35 @@
 <div>
-    <div class="justify-content-center">
+    <div class="row justify-content-center">
         <div class="col-6 " >
             <div class="card ">
                 <div class="card-header">
                     <h5 class="card-title">Tipo de Especialidad</h5>
                 </div>
-                <div class="card-body">         
-                       <div class="mb-3">
-                            <label class="form-label">Especialidad</label>
-                            <input type="text" class="form-control" placeholder="" wire:model="especialidad">
-                       </div>
+                <div class="card-body">
+                    <div class="mb-3">
+                        @if ($button)
+                            <form wire:submit.prevent="guardar">
+                                @include('livewire.formEspecialidad')
 
-                       @if ($button)
-                            <button type="button" class="btn btn-primary" wire:click="guardar">Guardar</button>
-                       @else
-                            <button type="button" class="btn btn-primary" wire:click="update">Actualizar</button>
-                       @endif
-                   
-                       {{-- <button type="button" class="btn btn-primary" wire:click="guardar">guardar</button>
-                      
-                       <button type="button" class="btn btn-primary" wire:click="update">actualizar</button> --}}
-                      
-                        
+                                <button type="submit" class="btn btn-primary" >Guardar</button>
+                                
+                            </form>
+                        @else
+                            <form wire:submit.prevent="update">
+                                @include('livewire.formEspecialidad')
+                                
+                                <button type="submit" class="btn btn-primary">Actualizar</button>
+                                
+                            </form>
+                        @endif
+                    </div>
+
+                    {{-- input de busqueda --}}
+                    <input wire:model="search" type="search" class="form-control" placeholder="Buscar especialidad...">
+                    
+                  
+                </div>
             </div>
-        </div>
         </div>
         <div class="row justify-content-center">
             <div class="col-10" >
@@ -58,10 +64,12 @@
                                 </td>
                             </tr>
                             @endforeach
+                            {{ $e->links() }}
                         </tbody>
                     </table>
         
                 </div>
+                
             </div>
             </div>
             </div>

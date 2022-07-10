@@ -6,64 +6,30 @@
                     <h5 class="card-title">Registro de Personas</h5>
                 </div>
                 <div class="card-body">
-                    <div class="row">
-                        <div class="col-12 col-lg-6">
-                            <div class="mb-3">
-                                <label>Tipos</label>
-                                <select class="form-control select2" data-bs-toggle="select2" wire:model="id_tipo" style="cursor: pointer ">
-                                    <option>Selecionar0...</option>
-                                    @foreach ($t as $item)
-                                       <option value="{{$item->id}}">{{$item->tipo_usuario}}</option>
-                                   @endforeach                         
-                                </select>
-                            </div>
-                            <div class="mb-3">
-                                <label>Nombre</label>
-                                <input type="text" class="form-control" wire:model="nombre" >
-                            </div>
-                            <div class="mb-3">
-                                <label>Apellido</label>
-                                <input type="text" class="form-control" wire:model="apellido" >
-                            </div>
-                            
-                            <div class="mb-3">
-                                <label>Telefono</label>
-                                <input type="text" class="form-control" wire:model="celular">
-                            </div>  
+                    
+                        @if ($button)
+                            <form wire:submit.prevent="guardar">
+                                @include('livewire.formDatosPersona')
 
-
-                            @if ($button)
-                                <button type="button" class="btn btn-primary" wire:click="guardar">Guardar</button>
-                            @else
-                                <button type="button" class="btn btn-primary" wire:click="update">Actualizar</button>
-                            @endif
-
-                            {{-- <button type="button" class="btn btn-primary" wire:click="guardar">guardar</button>   
-                            <button type="button" class="btn btn-primary" wire:click="update">actualizar</button> --}}
-                                            
+                                <button type="submit" class="btn btn-primary" >Guardar</button>
+                                
+                            </form>
+                        @else
+                            <form wire:submit.prevent="update">
+                                @include('livewire.formDatosPersona')
+                                
+                                <button type="submit" class="btn btn-primary">Actualizar</button>
+                                
+                            </form>
+                        @endif
+                        <br>
+                        <br>
+                        <div class="alert alert-success">
+                            {{ session('message') }}
                         </div>
-    
-                        <div class="col-12 col-lg-6">
-                            <div class="mb-3">
-                                <label>Especialidad</label>
-                                <select class="form-control select2" data-bs-toggle="select2" wire:model="id_especialidad" style="cursor: pointer ">
-                                    <option>Selecionar...</option>
-                                    @foreach ($e as $item2)
-                                       <option value="{{$item2->id}}"> {{$item2->especialidad}} </option>
-                                   @endforeach                         
-                                </select>
-                            </div>
-                            <div class="mb-3">
-                                <label>Cedula</label>
-                                <input type="text" class="form-control" wire:model="cedula">
-                            </div>
-                            <div class="mb-3">
-                                <label>Direccion</label>
-                                <input type="text" class="form-control" wire:model="direccion">                          
-                            </div>
-                        </div>
-                           
-                    </div>
+                        <br>
+                        <br>
+                        <input wire:model="search" type="search" class="form-control" placeholder="Buscar por cedula...">
                 </div>
             </div>
         </div>
@@ -130,7 +96,7 @@
                                         {{$tipoM->tipo_usuario}}
                                     </td>
                                 @endif
-                                <td>
+                                <td> -- asi se haría normalmente --
                                     {{$item->id_tipo}}
                                 </td> --}}
                                 {{-- <td>
@@ -146,6 +112,8 @@
                                 </td>
                             </tr>
                             @endforeach
+
+                            {{ $p->links() }}
                         </tbody>
                     </table>
         

@@ -4,23 +4,50 @@ namespace App\Http\Livewire;
 
 use Livewire\Component;
 use App\Models\Especialidades;
+use Livewire\WithPagination;
 
 class Especialidad extends Component
 {
+    use WithPagination;
+
     public $especialidad, $id_tipo;
     public $button = true;
+
+    protected $paginationTheme = 'bootstrap';
+
+    protected $rules = [
+        'especialidad' => 'required',
+    ];
+
+    protected $messages = [
+        'especialidad.required' => 'Campo requerido.'
+    ];
+
+    public $search;
+ 
+    protected $queryString = ['search'];
+
     public function render()
     {
-        $e=Especialidades::where('estado',1)->get();
+        $e=Especialidades::where('especialidad', 'like', '%'.$this->search.'%')->paginate(5);
+        //$e=Especialidades::where('estado',1)->get();
         return view('livewire.especialidad', compact('e'));
     }
      
+    public function updated($propertyName)
+    {
+        $this->validateOnly($propertyName);
+    }
+
+
     public function guardar(){
+        $this->validate();
         Especialidades::create([
             'especialidad' => $this->especialidad,
             'estado'=> 1,
         ]);
         $this->reset();
+        session()->flash('message', 'Guardado correctamente');
     }
 
     public function edit($id){
@@ -36,6 +63,7 @@ class Especialidad extends Component
             'especialidad' => $this->especialidad
         ]);
         $this->reset();
+        session()->flash('message', 'Actualizado correctamente');
     }
 
     public function destroyL($id){

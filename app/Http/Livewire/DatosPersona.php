@@ -7,21 +7,63 @@ use App\Models\TipoUsuarios;
 use App\Models\Especialidades;
 use App\Models\DatosPersonas;
 
+use Livewire\WithPagination;
+
 class DatosPersona extends Component
 {
     public $persona, $_id;
     public $nombre, $apellido, $cedula, $direccion, $celular, $id_tipo, $id_especialidad;
     public $button = true;
 
+    use WithPagination;
+
+    protected $paginationTheme = 'bootstrap';
+
+    protected $rules = [
+        'nombre' => 'required',
+        'apellido' => 'required',
+        'cedula' => 'required|min:10|max:10|numeric',
+        'celular' => 'required|min:10|max:10|numeric',
+        'direccion' => 'required',
+        'id_tipo' => 'required',
+        'id_especialidad' => 'required',
+    ];
+
+    protected $messages = [
+        'nombre.required' => 'Campo requerido.',
+        'apellido.required' => 'Campo requerido.',
+        'cedula.required' => 'Campo requerido.',
+        'cedula.min' => 'Mínimo 10 caracteres.',
+        'cedula.max' => 'Máximo 10 caracteres.',
+        'cedula.numeric' => 'Sólo se permiten numeros.',
+        'celular.required' => 'Campo requerido.',
+        'celular.min' => 'Mínimo 10 caracteres.',
+        'celular.max' => 'Máximo 10 caracteres.',
+        'celular.numeric' => 'Sólo se permiten numeros.',
+        'direccion.required' => 'Campo requerido.',
+        'id_tipo.required' => 'Campo requerido.',
+        'id_especialidad.required' => 'Campo requerido.',
+    ];
+
+    public function updated($propertyName)
+    {
+        $this->validateOnly($propertyName);
+    }
+
+    public $search;
+ 
+    protected $queryString = ['search'];
+
     public function render()
     {
         $e = Especialidades::where('estado',1)->get();
         $t = TipoUsuarios::where('estado',1)->get();
-        $p = DatosPersonas::where('estado',1)->get();
+        $p = DatosPersonas::where( 'cedula', 'like', '%'.$this->search.'%')->paginate(5);
         return view('livewire.datos-persona ', compact('p','t','e'));
     }
      
     public function guardar(){
+        $this->validate();
         DatosPersonas::create([
             'nombre' => $this->nombre,
             'apellido' => $this->apellido,
@@ -34,6 +76,7 @@ class DatosPersona extends Component
             
         ]);
         $this->reset();
+        session()->flash('message', 'Guardado correctamente');
     }
 
     public function edit($id){
@@ -63,6 +106,7 @@ class DatosPersona extends Component
             'id_especialidad' => $this->id_especialidad,
         ]);
         $this->reset();
+        session()->flash('message', 'Actualizado correctamente');
     }
 
     public function destroyL($id){
